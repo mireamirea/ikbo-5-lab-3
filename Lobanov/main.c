@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+
 #include<stdio.h>
 #include<stdlib.h>
 #include <string.h>
@@ -6,11 +6,12 @@
 
 
 int main(void){
-	int result,key,data;
+	int key,data;
 	char command[255], name[255];
 	node *root=NULL,*tresult=NULL;
-	stat ts, s0{ 0,0};
-	while (true) {
+	stat ts, s0 ={0,0};
+
+	while (1) {
 		scanf("%s", command);
 		if (!strcmp(command, "show")) {
 			printf("Your Tree:\n");
@@ -42,7 +43,7 @@ int main(void){
 		if (!strcmp(command, "delete")) {
 			scanf("%d", &key);
 			delete_elem(root, key);
-			 
+
 		}
 		if (!strcmp(command, "destroy")) {
 			destroy_tree(root);

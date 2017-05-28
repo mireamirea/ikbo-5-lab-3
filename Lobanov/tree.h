@@ -5,13 +5,13 @@
 #define NO_MEMORY 5
 typedef struct node {
 	int data;
-	node *left;
-	node *right;
-};
+	struct node *left;
+	struct node *right;
+} node;
 typedef struct stat {
 	int leaf;
 	int ALL_node;
-};
+} stat;
 //выделение памяти на элемент
 node* Tcreate(int data) {
 	node *NewNode;
@@ -28,10 +28,10 @@ node* Tcreate(int data) {
 //добавление узла
 int add_node(int data, node *parent) {
 	node *NewNode;
-	
+
 	if (parent == NULL)
 		return WRONG_DATA ;
-	
+
 	if (parent->left == NULL) {
 		NewNode = Tcreate(data);
 		if (!NewNode)
@@ -39,7 +39,7 @@ int add_node(int data, node *parent) {
 		parent->left = NewNode;
 		return SUCCESS;
 	}
-	
+
 	if (parent->right == NULL) {
 		NewNode = Tcreate(data);
 		if (!NewNode)
@@ -47,7 +47,7 @@ int add_node(int data, node *parent) {
 		parent->right = NewNode;
 		return SUCCESS;
 	}
-	
+
 	return TOO_MANY_CHILDREN;
 
 }
@@ -129,14 +129,15 @@ int add_sibling(int NewData,int key,node *root) {
 }
 //вывод дерева на экран
 void show(node *root,int offset) {
+    int i;
 	if (root == NULL)
 		return;
 	if (root->right != NULL)
 		show(root->right, offset + 3);
-	for (int i = 0; i < offset; i++) 
+	for (i = 0; i < offset; i++)
 		printf(" ");
 	printf("%d\n", root->data);
-	if (root->left != NULL) 
+	if (root->left != NULL)
 		show(root->left, offset + 3);
 }
 //функция для вывода команд в файл
@@ -171,9 +172,9 @@ node* load_tree(char *name){
 		scanf("%s", name);
 		fp = fopen(name, "r");
 	}
-	
+
 	fscanf(fp, "%s", command);
-	
+
 	if (strcmp(command, "add")) {
 		printf("Eror.Invalid sintax\n");
 		return NULL;
@@ -211,12 +212,12 @@ node* load_tree(char *name){
 				add_son(data, key, root);
 			}
 		}
-		if (!strcmp(command, "sibling")) { 
+		if (!strcmp(command, "sibling")) {
 			fscanf(fp, "%s", command);
 			key = atoi(command);
 			add_sibling(data, key, root);
 		}
-	
+
 	}
 	return root;
 }
@@ -229,7 +230,7 @@ void show_stat(node *root,stat *ts) {
 		ts->leaf++;
 		return;
 	}
-		
+
 	if (root->left == NULL)
 		return;
 	else
@@ -240,27 +241,4 @@ void show_stat(node *root,stat *ts) {
 		show_stat(root->right,ts);
 }
 
-//обработчик ошибок(не используется, но пусть будет))
-void error_processing(int result) {
-	switch (result) {
-	case SUCCESS:
-		return;
-		break;
-	case ELEMENT_NOT_FOUND:
-		printf("Eror 1.Element not found\n");
-		return;
-		break;
-	case TOO_MANY_CHILDREN:
-		printf("Eror 2.Too mane children\n");
-		return;
-		break;
-	case WRONG_DATA:
-		printf("Eror 3.Wrong data\n");
-		return;
-		break;
-	case NO_MEMORY:
-		printf("Eror 4.No memory\n");
-		return;
-		break;
-	}
-}
+
