@@ -9,8 +9,7 @@ int main(void){
 	int key,data;
 	char command[255], name[255];
 	node *root=NULL,*tresult=NULL;
-	stat ts, s0 ={0,0};
-
+	stat ts, s0={ 0,0};
 	while (1) {
 		scanf("%s", command);
 		if (!strcmp(command, "show")) {

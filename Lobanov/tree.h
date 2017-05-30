@@ -12,7 +12,7 @@ typedef struct stat {
 	int leaf;
 	int ALL_node;
 } stat;
-//выделение памяти на элемент
+
 node* Tcreate(int data) {
 	node *NewNode;
 	NewNode = (node*)malloc(sizeof(node));
@@ -25,7 +25,7 @@ node* Tcreate(int data) {
 	else
 		return(NULL);
 }
-//добавление узла
+
 int add_node(int data, node *parent) {
 	node *NewNode;
 
@@ -51,19 +51,22 @@ int add_node(int data, node *parent) {
 	return TOO_MANY_CHILDREN;
 
 }
-//поиск элемента
+
 node* tree_search(node* root, int Key) {
 	node  *result;
 	if (root == NULL)
 		return NULL;
 	if (Key == root->data)
 		return root;
-	if (result = tree_search(root->left, Key))
+	result = tree_search(root->left, Key);
+	if (result)
 		return result;
-	result = tree_search(root->right, Key);
-	return result;
+	else {
+		result = tree_search(root->right, Key);
+		return result;
+	}
 }
-//поиск родителя элемента
+
 node* search_parrent(node* root, int key) {
 	node *result;
 	if (root->left == NULL)
@@ -75,12 +78,15 @@ node* search_parrent(node* root, int key) {
 		return NULL;
 	if (root->right->data == key)
 		return(root);
-	if (result = search_parrent(root->left, key))
+	result = search_parrent(root->left, key);
+	if (result)
 		return result;
-	result = search_parrent(root->right, key);
-	return result;
+	else {
+		result = search_parrent(root->right, key);
+		return result;
+	}
 }
-//уничтожение дерева
+
 void destroy_tree(node *root) {
 	if (root == NULL)
 		return;
@@ -88,7 +94,7 @@ void destroy_tree(node *root) {
 	destroy_tree(root->right);
 	free(root);
 }
-//уничтожение под дерева
+
 void delete_elem(node *root, int key) {
 	node *result;
 	result=search_parrent(root, key);
@@ -104,7 +110,7 @@ void delete_elem(node *root, int key) {
 		}
 	return;
 }
-//добавление ребёнка
+
 int add_son(int NewData,int key,node *root) {
 	int result;
 	node *parent;
@@ -115,7 +121,7 @@ int add_son(int NewData,int key,node *root) {
 		return ELEMENT_NOT_FOUND;
 	return result;
 }
-//добавление ровестника
+
 int add_sibling(int NewData,int key,node *root) {
 	node* parent;
 	int result;
@@ -127,9 +133,9 @@ int add_sibling(int NewData,int key,node *root) {
 	return result;
 
 }
-//вывод дерева на экран
+
 void show(node *root,int offset) {
-    int i;
+	int i;
 	if (root == NULL)
 		return;
 	if (root->right != NULL)
@@ -140,7 +146,7 @@ void show(node *root,int offset) {
 	if (root->left != NULL)
 		show(root->left, offset + 3);
 }
-//функция для вывода команд в файл
+
 void show_command(node *root,FILE *fp,int prev_data) {
 	if (root == NULL)
 		return;
@@ -152,7 +158,7 @@ void show_command(node *root,FILE *fp,int prev_data) {
 	show_command(root->left, fp, root->data);
 	show_command(root->right, fp, root->data);
 }
-//сохранение дерева в файл с именем
+
 void save_tree(node *root) {
 	FILE *fp;
 	fp = fopen("tree.txt", "w");
@@ -160,7 +166,7 @@ void save_tree(node *root) {
 	fclose(fp);
 	return;
 }
-//загрузка дерева из файла с именем name(надо переделать)
+
 node* load_tree(char *name){
 	FILE *fp;
 	char command[255];
@@ -203,7 +209,7 @@ node* load_tree(char *name){
 		fscanf(fp,"%s", command);
 		data = atoi(command);
 		fscanf(fp, "%s", command);
-		if (!strcmp(command, "parent")) { //нужна проверка на root
+		if (!strcmp(command, "parent")) {
 			fscanf(fp, "%s", command);
 			if (!strcmp(command, "root"))
 				add_node(data, root);
@@ -221,7 +227,7 @@ node* load_tree(char *name){
 	}
 	return root;
 }
-//статистика
+
 void show_stat(node *root,stat *ts) {
 	if (root == NULL)
 		return;
@@ -240,5 +246,4 @@ void show_stat(node *root,stat *ts) {
 	else
 		show_stat(root->right,ts);
 }
-
 
