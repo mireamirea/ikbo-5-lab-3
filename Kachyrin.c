@@ -23,22 +23,18 @@ void BackPtr(TypeTree *Tree,TypeTree *ptr);
 int StringCmp(int *TempInt1,int *TempInt2,char filename[]){
     char Command[255];
     scanf("%s",Command);
-    if (strcmp(Command,"help")==0)
-        return 16;
     if (strcmp(Command,"show")==0)
-        return 13;
+        return 10;
     if (strcmp(Command,"exit")==0)
-        return 18;
+        return 14;
     if (strcmp(Command,"save")==0){
         scanf("%s",filename);
-        return 14;
+        return 11;
     }
     if (strcmp(Command,"load")==0){
         scanf("%s",filename);
-        return 15;
+        return 12;
     }
-    if (strcmp(Command,"analysis")==0)
-        return 17;
     if (strcmp(Command,"add")==0)
         return CommandCheck(1,2,3,4,TempInt1,TempInt2);
     if (strcmp(Command,"renew")==0)
@@ -47,27 +43,9 @@ int StringCmp(int *TempInt1,int *TempInt2,char filename[]){
        scanf("%s",Command);
         if (strcmp(Command,"tree")==0)
             return 9;
-        if (strcmp(Command,"left")==0){
-            scanf("%s",Command);
-            if (strcmp(Command,"parent")==0){
-                scanf("%d",TempInt2);
-                return 10;
-            }
-        }
-        if (strcmp(Command,"right")==0){
-            scanf("%s",Command);
-            if (strcmp(Command,"parent")==0){
-                scanf("%d",TempInt2);
-                return 11;
-            }
-        }
-        if (strcmp(Command,"sibling")==0){
-            scanf("%d",TempInt2);
-            return 12;
-        }
-    }
+      }
     return -1;
-}
+  }
 
 int CommandCheck(int TempNum1,int TempNum2,int TempNum3,int TempNum4,int *TempInt1,int *TempInt2){
     char Command[255];
@@ -207,8 +185,7 @@ int main(void){
     char filename[255];
     while(True){
         system("CLS");
-        printf("Enter command: ");
-        printf("(If you want see a HELP(commands) enter show )\n");
+        printf("Enter com: ");
         SwitchNum=StringCmp(&TempNum1,&TempNum2,filename);
         fflush(stdin);
         switch (SwitchNum){
@@ -217,12 +194,12 @@ int main(void){
                 Tree=AddTree(Tree,TempNum1);
                 Tree->Back=NULL;
             }
-            else printf("Root was made\n");
+            else printf("Root is creat\n");
         break;
         case 2:
             TempTree=TreeSearch(Tree,TempNum2,1,1);
             if (TempTree==NULL){
-                printf("Parent is not found or parent is full\n");
+                printf("Full house\n");
                 break;
             }
             TempTree->Left=AddTree(TempTree->Left,TempNum1);
@@ -231,7 +208,7 @@ int main(void){
         case 3:
             TempTree=TreeSearch(Tree,TempNum2,2,1);
             if (TempTree==NULL){
-                printf("Parent is not found or parent is full\n");
+                printf("Full house\n");
                 break;
             }
             TempTree->Right=AddTree(TempTree->Right,TempNum1);
@@ -262,7 +239,7 @@ int main(void){
         case 6:
             TempTree=TreeSearch(Tree,TempNum2,4,1);
             if (TempTree==NULL){
-                printf("Parent or child are not found\n");
+                printf("Not found\n");
                 break;
             }
             TempTree->Left->Key=TempNum1;
@@ -270,7 +247,7 @@ int main(void){
         case 7:
             TempTree=TreeSearch(Tree,TempNum2,5,1);
             if (TempTree==NULL){
-                printf("Parent or child is not found\n");
+                printf("Not found\n");
                 break;
             }
             TempTree->Right->Key=TempNum1;
@@ -278,7 +255,7 @@ int main(void){
         case 8:
             TempTree=TreeSearch(Tree,TempNum2,6,1);
             if (TempTree==NULL){
-                printf("Sibling is not found\n");
+                printf("Not found\n");
                 break;
             }
             TempTree->Key=TempNum1;
@@ -307,32 +284,14 @@ int main(void){
                 LoadFile(&Tree,&openFile);
                 fclose(openFile);
                 BackPtr(Tree,NULL);
-            }else printf("Incorrect filename\n");
-        break;
-        case 13:
-            printf("X = number that you insert\n");
-            printf("1=add root X\n");
-            printf("2=add node X left parent X\n");
-            printf("3=add node X right parent X\n");
-            printf("4=add node X sibling X\n");
-            printf("5=renew root\n");
-            printf("6=renew node X left parent X\n");
-            printf("7=renew node X right parent X\n");
-            printf("8=renew node X sibling X\n");
-            printf("9=delete a tree\n");
-            printf("10=show\n");
-            printf("11=save filename\n");
-            printf("12=load filename\n");
-            printf("13=help\n");
-            printf("14=exit\n");
-            system("pause");
+            }else printf("Error\n");
         break;
         case 14:
             FreeTree(Tree);
             return 0;
         break;
         default:
-            printf("Incorrect command\n");
+            printf("Error\n");
         }
     }
 }
