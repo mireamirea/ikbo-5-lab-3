@@ -190,9 +190,6 @@ int main()
         }
         else {printf("Syntax error\n");fflush(stdin);}
         fflush(stdin);
-        printf("Press any key\n");
-        getchar();
-        system("CLS");
         printf("Enter command, help or exit: \n");
         scanf("%s", word);
     }
