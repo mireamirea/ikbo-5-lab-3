@@ -30,7 +30,7 @@ int main()
     TNODE *ynode;
     char word[255];
     int key,searchkey;
-    int depth, leavesnum, nodesnum, innodesnum, isheap, length;
+    int depth, leavesnum, nodesnum, innodesnum, isheap;
     printf("Enter command: ");
     scanf("%s", word);
     while (strcmp(word,"exit")!=0)
@@ -39,7 +39,7 @@ int main()
         ynode = NULL;
         if (strcmp(word,"add")==0)
         {
-            scanf(" %s", &word);
+            scanf(" %s", word);
             if (strcmp(word,"root")==0)
             {
                 if (scanf(" %d", &key))
@@ -63,7 +63,8 @@ int main()
                         if (strcmp(word,"parent")==0)
                         {
                             scanf(" %s", word);
-                            if (searchkey=atoi(word))
+                            searchkey=atoi(word);
+                            if (searchkey)
                             {
                                 SearchTree(searchkey, tnode, &xnode);
                                 AddChild(xnode,key);
@@ -190,6 +191,8 @@ int main()
         }
         else {printf("Syntax error\n");fflush(stdin);}
         fflush(stdin);
+        printf("Press any key\n");
+        getchar();
         printf("Enter command, help or exit: \n");
         scanf("%s", word);
     }
