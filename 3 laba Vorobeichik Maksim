@@ -1,0 +1,168 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct node {
+    int value;
+    struct node *left;
+    struct node *right;
+};
+
+int insert(node* p, int v, char child) {
+    if (child == 'l' && p->left != NULL || child == 'r' && p->right != NULL)
+	{
+		printf("Error: node is exist\n");
+		 return 1;
+	}
+
+    node* leaf = (node*)malloc(sizeof(node));
+    leaf->value = v;
+    leaf->left = NULL;
+    leaf->right = NULL;
+
+    if (child == 'l')
+        p->left = leaf;
+    else
+        p->right = leaf;
+
+    return 0;
+}
+
+void print(FILE* f, node* p, int offset)
+{
+    if (p->right != NULL) print(f,p->right, offset + 3);
+    for (int i = 0; i < offset; i++) fprintf(f," ");
+    //printf("%d\n", p->value);
+    fprintf(f,"%d\n", p->value);
+    if (p->left != NULL) print(f, p->left, offset + 3);
+}
+
+// Принтует поддерево p
+void search_and_add(node* p,int par, int z)
+{
+    if (par == p->value)
+	{
+		if(p->left==NULL) insert(p, z, 'l');
+		else 			  insert(p, z, 'r');
+		return;
+	}
+	if (p->left != NULL) search_and_add(p->left,par,z);
+	if (p->right != NULL) search_and_add(p->right,par,z);
+}
+
+// Принтует поддерево p
+void wwww(node* p,int par, int z)
+{
+	if (p->left != NULL)
+	{
+		if (p->left->value == par)
+		{
+			insert(p, z, 'r');
+			return;
+		}
+		search_and_add(p->left,par,z);
+	}
+	if (p->right != NULL)
+	{
+		if (p->left->value == par)
+		{
+			insert(p, z, 'l');
+			return;
+		}
+		search_and_add(p->left,par,z);
+	}
+
+	//search_and_add(p->left,par,z);
+	//if (p->right != NULL) search_and_add(p->right,par,z);
+}
+
+
+int main()
+{
+    node root;
+    root.value = 0;
+    root.left = NULL;
+    root.right = NULL;
+	int exist = 0; // Если эта переменная 0, то это значит что корня нет (дерево пустое). Если 1, то корень есть
+
+    char str[256];
+     char gz[256];
+printf("vvedite -load,show,save or exit\n");
+    FILE* f;
+
+    do
+    {
+        scanf("%s",&str);
+        if (strcmp(str,"load")==0)
+        {  printf("nazvanie\n");
+            scanf("%s",&str);
+            f = fopen(str,"r");
+            if(f==NULL)
+                printf("ne naiden");
+            int z;
+
+            while (fscanf(f,"%s",&str) != EOF)
+            {
+                if (strcmp(str,"add")==0)
+                {
+                    fscanf(f,"%s",&str);
+                    if (strcmp(str,"node")==0)
+                    {
+                        fscanf(f,"%d",&z);
+                        fscanf(f,"%d",&z);
+                        fscanf(f,"%s",&str);
+                        if (strcmp(str,"parent")==0)
+                        {
+                            fscanf(f,"%s",&str);
+                            if (strcmp(str,"root")==0)
+                            {
+                                if(root.left==NULL)
+                                    insert(&root, z, 'l');
+                                else
+                                    insert(&root, z, 'r');
+                            }
+                            else
+                            {
+                                int par = atoi(str); // Из строки делает число
+                                search_and_add(&root,par,z);
+
+                            }
+                        }
+                        if (strcmp(str,"sibling")==0)
+                        {
+                        }
+
+                    }
+                    if (strcmp(str,"root")==0)
+                    {
+                        fscanf(f,"%d",&z);
+                        if (exist == 1)
+                        {
+                            printf("дерево не пустое\n");
+                            continue; // Продолжить итерацию цикла, т.е. вернет нас на  do
+                        }
+
+                        root.value = z;
+                        exist = 1;
+                    }
+                } // add
+            }
+
+        }
+
+        if (strcmp(str,"show")==0)
+        {
+            print(stdout,&root, 0);
+
+        }
+        if (strcmp(str,"save")==0)
+        {printf("name file");
+            scanf("%s",&str);
+            gz=str;
+            f = fopen(str,"w");
+            if(f==NULL)
+                printf("cannot open");
+            print(f,&root, 0);
+            fclose(f);
+        }
+    } while (strcmp(str,"exit") != 0);
